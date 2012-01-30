@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="hello">Hello World, HelloWorldActivity!</string>
+    <string name="app_name">Hello World!</string>
+    <string name="update">Update</string>
+</resources>
