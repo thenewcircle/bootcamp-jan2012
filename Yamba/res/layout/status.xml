@@ -21,7 +21,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/button_update"
         android:layout_centerHorizontal="true"
-        android:hint="@string/hint" />
+        android:hint="@string/hint"
+        android:inputType="textAutoCorrect" />
 
     <TextView
         style="@style/title"
