@@ -1,0 +1,4 @@
+= Notes = 
+
+== Useful links
+* http://www.screaming-penguin.com/info/android_drawables/android_drawables.html
