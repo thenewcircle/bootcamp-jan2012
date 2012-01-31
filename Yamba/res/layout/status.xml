@@ -3,35 +3,33 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_margin="10dp"
-    android:gravity="center">
+    android:gravity="center" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/button_update"
+        style="@style/action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@android:drawable/picture_frame"
         android:text="@string/update" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/edit_status"
+        style="@style/text_area"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/button1"
+        android:layout_below="@+id/button_update"
         android:layout_centerHorizontal="true"
-        android:gravity="top"
-        android:hint="@string/hint"
-        android:inputType="textMultiLine" />
+        android:hint="@string/hint" />
 
     <TextView
-        android:id="@+id/textView1"
+        style="@style/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button1"
-        android:layout_alignBottom="@+id/button1"
+        android:layout_alignBaseline="@+id/button_update"
+        android:layout_alignBottom="@+id/button_update"
         android:layout_alignParentLeft="true"
-        android:text="@string/update_status"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/update_status" />
 
 </RelativeLayout>
