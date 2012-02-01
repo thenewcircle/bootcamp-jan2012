@@ -2,6 +2,7 @@ package com.marakana.android.yamba;
 
 import winterwell.jtwitter.Twitter;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,19 +32,34 @@ public class StatusActivity extends Activity implements OnClickListener {
 	/** Called when the update button is clicked. */
 	@Override
 	public void onClick(View v) {
-		final String status = editStatus.getText().toString();
+		String status = editStatus.getText().toString();
 
-		new Thread() {
-			public void run() {
-				Twitter twitter = new Twitter("student", "password");
-				twitter.setAPIRootUrl("http://yamba.marakana.com/api");
-				twitter.setStatus(status);
-				Log.d("Yamba", "onClicked with status: " + status);
-				Toast.makeText(StatusActivity.this,
-						"Successfully posted: " + status, Toast.LENGTH_LONG)
-						.show();
-			}
-		}.start();
+		new PostToTwitter().execute(status);
+		
+		Log.d("Yamba", "onClicked with status: " + status);
+	}
+
+	/** AsyncTask responsible for posting to twitter. */
+	class PostToTwitter extends AsyncTask<String, Void, String> {
+
+		/** Work executed on a background thread. */
+		@Override
+		protected String doInBackground(String... status) {
+			Twitter twitter = new Twitter("student", "password");
+			twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+			twitter.setStatus(status[0]);
+			return "Successfully posted: " + status[0];
+		}
+
+		/** Called when we are done with the background job. */
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+
+			Toast.makeText(StatusActivity.this, result, Toast.LENGTH_LONG)
+					.show();
+		}
 
 	}
+
 }
