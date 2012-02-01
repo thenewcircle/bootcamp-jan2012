@@ -11,4 +11,7 @@
     <string name="password_summary">What is your password?</string>
     <string name="server">Server API</string>
     <string name="server_summary">Where is your service hosted?</string>
+    <string name="yamba_prefs">Yamba Prefs</string>
+    <string name="yamba_status">Yamba Status Update</string>
+    <string name="prefs">Prefs</string>
 </resources>

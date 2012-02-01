@@ -3,10 +3,14 @@ package com.marakana.android.yamba;
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Debug;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,13 +21,14 @@ public class StatusActivity extends Activity implements OnClickListener {
 	Button buttonUpdate;
 	EditText editStatus;
 
+	// --- Activity Lifecycle Callbacks
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-//		Debug.startMethodTracing("Yamba.trace");
-		
+
+		// Debug.startMethodTracing("Yamba.trace");
+
 		setContentView(R.layout.status);
 
 		// Find views
@@ -34,15 +39,28 @@ public class StatusActivity extends Activity implements OnClickListener {
 		buttonUpdate.setOnClickListener(this);
 	}
 
-	
 	/** Called when we leave this activity. */
 	@Override
 	protected void onStop() {
 		super.onStop();
-//		Debug.stopMethodTracing();
+		// Debug.stopMethodTracing();
 	}
 
+	// ----- Menu Callbacks -----
 
+	/** Called when menu button is pressed first time only. */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	/** Called each time a menu item is selected. */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		startActivity(new Intent(this, PrefsActivity.class));
+		return super.onOptionsItemSelected(item);
+	}
 
 	/** Called when the update button is clicked. */
 	@Override
@@ -50,7 +68,7 @@ public class StatusActivity extends Activity implements OnClickListener {
 		String status = editStatus.getText().toString();
 
 		new PostToTwitter().execute(status);
-		
+
 		Log.d("Yamba", "onClicked with status: " + status);
 	}
 
@@ -61,8 +79,14 @@ public class StatusActivity extends Activity implements OnClickListener {
 		@Override
 		protected String doInBackground(String... status) {
 			try {
-				Twitter twitter = new Twitter("student", "password");
-				twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+				SharedPreferences prefs = PreferenceManager
+						.getDefaultSharedPreferences(StatusActivity.this);
+				String username = prefs.getString("username", "");
+				String password = prefs.getString("password", "");
+				String server = prefs.getString("server", "");
+				
+				Twitter twitter = new Twitter(username, password);
+				twitter.setAPIRootUrl(server);
 				twitter.setStatus(status[0]);
 				return "Successfully posted: " + status[0];
 			} catch (TwitterException e) {
