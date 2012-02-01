@@ -58,8 +58,15 @@ public class StatusActivity extends Activity implements OnClickListener {
 	/** Called each time a menu item is selected. */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		startActivity(new Intent(this, PrefsActivity.class));
-		return super.onOptionsItemSelected(item);
+		switch( item.getItemId() ) {
+		case R.id.item_prefs:
+			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+		case R.id.item_about:
+			startActivity(new Intent(this, AboutActivity.class));			
+			return true;
+		}
+		return false;
 	}
 
 	/** Called when the update button is clicked. */

@@ -14,4 +14,5 @@
     <string name="yamba_prefs">Yamba Prefs</string>
     <string name="yamba_status">Yamba Status Update</string>
     <string name="prefs">Prefs</string>
+    <string name="yamba_about">Yamba About</string>
 </resources>

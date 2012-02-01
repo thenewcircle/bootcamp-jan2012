@@ -6,5 +6,6 @@
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/prefs" android:showAsAction="ifRoom">
     </item>
+    <item android:id="@+id/item_about" android:title="@string/yamba_about" android:icon="@android:drawable/ic_menu_info_details" android:showAsAction="ifRoom"></item>
 
 </menu>
