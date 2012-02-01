@@ -3,6 +3,8 @@ package com.marakana.android.yamba;
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class StatusActivity extends Activity implements OnClickListener {
+	static final String TAG = "Yamba";
 	Button buttonUpdate;
 	EditText editStatus;
 
@@ -79,8 +82,28 @@ public class StatusActivity extends Activity implements OnClickListener {
 		Log.d("Yamba", "onClicked with status: " + status);
 	}
 
+	
+	ProgressDialog dialog;
+	/** Called as result of showDialog() call. */
+	@Override
+	protected Dialog onCreateDialog(int id, Bundle args) {
+		dialog = new ProgressDialog(this);
+		dialog.setMessage("Posting...");
+		dialog.setCancelable(true);
+		return dialog;
+	}
+
+
 	/** AsyncTask responsible for posting to twitter. */
 	class PostToTwitter extends AsyncTask<String, Void, String> {
+		
+		/** Called before the background job starts. */
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			// Create progress bar dialog here
+			showDialog(-1, null);
+		}
 
 		/** Work executed on a background thread. */
 		@Override
@@ -92,11 +115,13 @@ public class StatusActivity extends Activity implements OnClickListener {
 				String password = prefs.getString("password", "");
 				String server = prefs.getString("server", "");
 				
+				Log.d(TAG, String.format("%s/%s@%s", username, password, server));
 				Twitter twitter = new Twitter(username, password);
 				twitter.setAPIRootUrl(server);
 				twitter.setStatus(status[0]);
 				return "Successfully posted: " + status[0];
 			} catch (TwitterException e) {
+				Log.e(TAG, "Failure to post", e);
 				return "Failure to post";
 			}
 		}
@@ -106,6 +131,9 @@ public class StatusActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 
+			// Cancel progress bar dialog here
+			dialog.cancel();
+		
 			Toast.makeText(StatusActivity.this, result, Toast.LENGTH_LONG)
 					.show();
 		}
