@@ -1,9 +1,11 @@
 package com.marakana.android.yamba;
 
 import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +21,9 @@ public class StatusActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+//		Debug.startMethodTracing("Yamba.trace");
+		
 		setContentView(R.layout.status);
 
 		// Find views
@@ -28,6 +33,16 @@ public class StatusActivity extends Activity implements OnClickListener {
 		// Add button listener
 		buttonUpdate.setOnClickListener(this);
 	}
+
+	
+	/** Called when we leave this activity. */
+	@Override
+	protected void onStop() {
+		super.onStop();
+//		Debug.stopMethodTracing();
+	}
+
+
 
 	/** Called when the update button is clicked. */
 	@Override
@@ -45,10 +60,14 @@ public class StatusActivity extends Activity implements OnClickListener {
 		/** Work executed on a background thread. */
 		@Override
 		protected String doInBackground(String... status) {
-			Twitter twitter = new Twitter("student", "password");
-			twitter.setAPIRootUrl("http://yamba.marakana.com/api");
-			twitter.setStatus(status[0]);
-			return "Successfully posted: " + status[0];
+			try {
+				Twitter twitter = new Twitter("student", "password");
+				twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+				twitter.setStatus(status[0]);
+				return "Successfully posted: " + status[0];
+			} catch (TwitterException e) {
+				return "Failure to post";
+			}
 		}
 
 		/** Called when we are done with the background job. */
