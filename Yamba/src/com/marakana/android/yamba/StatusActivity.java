@@ -7,9 +7,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +20,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class StatusActivity extends Activity implements OnClickListener {
+public class StatusActivity extends Activity implements OnClickListener, TextWatcher {
 	static final String TAG = "Yamba";
 	Button buttonUpdate;
 	EditText editStatus;
+	TextView textCount;
 
 	// --- Activity Lifecycle Callbacks
 	/** Called when the activity is first created. */
@@ -37,9 +42,11 @@ public class StatusActivity extends Activity implements OnClickListener {
 		// Find views
 		buttonUpdate = (Button) findViewById(R.id.button_update);
 		editStatus = (EditText) findViewById(R.id.edit_status);
+		textCount = (TextView) findViewById(R.id.text_count);
 
-		// Add button listener
+		// Add listeners
 		buttonUpdate.setOnClickListener(this);
+		editStatus.addTextChangedListener(this);
 	}
 
 	/** Called when we leave this activity. */
@@ -138,6 +145,35 @@ public class StatusActivity extends Activity implements OnClickListener {
 					.show();
 		}
 
+	}
+
+
+	// --- TextWatcher Callbacks 
+	
+	@Override
+	public void afterTextChanged(Editable s) {
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int c) {
+		// Update count
+		int lenght = editStatus.getText().length();
+		int count = 140 - lenght;
+		textCount.setText(Integer.toString(count));
+		
+		// Update color
+		if(count<20) {
+			textCount.setTextColor(Color.WHITE);
+			textCount.setBackgroundColor(Color.RED);
+		} else {
+			textCount.setTextColor(Color.BLACK);
+			textCount.setBackgroundColor(Color.WHITE);
+		}
 	}
 
 }

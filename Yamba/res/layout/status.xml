@@ -22,15 +22,17 @@
         android:layout_below="@+id/button_update"
         android:layout_centerHorizontal="true"
         android:hint="@string/hint"
-        android:inputType="textAutoCorrect" />
+        android:inputType="textAutoCorrect|textMultiLine" />
 
     <TextView
+        android:id="@+id/text_count"
         style="@style/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/button_update"
         android:layout_alignBottom="@+id/button_update"
-        android:layout_alignParentLeft="true"
-        android:text="@string/update_status" />
+        android:layout_alignParentLeft="true" 
+        android:text="140"/>
+
 
 </RelativeLayout>
