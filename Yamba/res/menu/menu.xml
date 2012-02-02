@@ -13,8 +13,23 @@
         android:showAsAction="ifRoom"
         android:title="@string/yamba_about">
     </item>
-    <item android:id="@+id/item_start" android:icon="@android:drawable/ic_media_play" android:showAsAction="ifRoom" android:title="@string/start_service"></item>
-    <item android:id="@+id/item_stop" android:icon="@android:drawable/ic_media_pause" android:showAsAction="ifRoom" android:title="@string/start_service"></item>
-    
+    <item
+        android:id="@+id/item_start"
+        android:icon="@android:drawable/ic_media_play"
+        android:showAsAction="ifRoom"
+        android:title="@string/start_service">
+    </item>
+    <item
+        android:id="@+id/item_stop"
+        android:icon="@android:drawable/ic_media_pause"
+        android:showAsAction="ifRoom"
+        android:title="@string/stop_service">
+    </item>
+    <item
+        android:id="@+id/item_refresh"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:showAsAction="always"
+        android:title="@string/refresh">
+    </item>
 
 </menu>

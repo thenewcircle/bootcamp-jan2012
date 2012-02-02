@@ -1,16 +1,13 @@
 package com.marakana.android.yamba;
 
-import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class StatusActivity extends Activity implements OnClickListener, TextWatcher {
-	static final String TAG = "Yamba";
+	static final String TAG = "StatusActivity";
 	Button buttonUpdate;
 	EditText editStatus;
 	TextView textCount;
@@ -47,6 +44,8 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 		// Add listeners
 		buttonUpdate.setOnClickListener(this);
 		editStatus.addTextChangedListener(this);
+		
+		Log.d(TAG, "onCreated");
 	}
 
 	/** Called when we leave this activity. */
@@ -80,6 +79,9 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 			return true;
 		case R.id.item_stop:
 			stopService(new Intent(this, UpdateService.class));
+			return true;
+		case R.id.item_refresh:
+			startService(new Intent(this, RefreshService.class));
 			return true;
 		}
 		return false;

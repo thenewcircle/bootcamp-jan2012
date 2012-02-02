@@ -19,4 +19,5 @@
     <string name="stop_service">Stop Updater</string>
     <string name="interval">Refresh Interval</string>
     <string name="interval_summary">How frequently to refresh timeline?</string>
+    <string name="refresh">Refresh</string>
 </resources>

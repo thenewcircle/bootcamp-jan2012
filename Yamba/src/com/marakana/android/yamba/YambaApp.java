@@ -16,6 +16,7 @@ public class YambaApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		Log.d(TAG, "onCreated");
 	}
 
 	/** Returns Twitter object, lazily initializing it when needed. */
