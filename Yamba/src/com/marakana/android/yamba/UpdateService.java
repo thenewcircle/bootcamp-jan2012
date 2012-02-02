@@ -14,25 +14,30 @@ import android.util.Log;
 
 public class UpdateService extends Service {
 	static final String TAG = "UpdateService";
-	static final long DELAY = 30000; //30s
 	Twitter twitter;
 	Thread updater;
 	boolean shouldRun = true;
+	long intervalDelay; // seconds
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
+		// Get the preferences
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		String username = prefs.getString("username", "");
 		String password = prefs.getString("password", "");
 		String server = prefs.getString("server", "");
+		intervalDelay = Long.parseLong( prefs.getString("interval", "0") );
+		Log.d(TAG, String.format("%s/%s@%s with delay %d s", username, password,
+				server, intervalDelay));
 
-		Log.d(TAG, String.format("%s/%s@%s", username, password, server));
+		// Generate Twitter object
 		twitter = new Twitter(username, password);
 		twitter.setAPIRootUrl(server);
-		
+
+		// Start the updater thread
 		updater = new Thread(new Updater());
 		updater.start();
 
@@ -43,10 +48,14 @@ public class UpdateService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		shouldRun = false;
+
+		// Stop the updater thread
 		updater.interrupt();
 		updater = null;
 
+		// Clean up twitter object
 		twitter = null;
+
 		Log.d(TAG, "onDestroy");
 	}
 
@@ -57,10 +66,10 @@ public class UpdateService extends Service {
 
 	/** Separate thread that pulls the timeline. */
 	class Updater implements Runnable {
-		
+
 		@Override
 		public void run() {
-			while (shouldRun) {
+			while (shouldRun && intervalDelay!=0) {
 				// Get the friends timeline
 				try {
 					List<Status> timeline = twitter.getHomeTimeline();
@@ -71,14 +80,14 @@ public class UpdateService extends Service {
 				} catch (TwitterException e1) {
 					Log.e(TAG, "Failed to pull timeline", e1);
 				}
-				
+
 				// Sleep
 				try {
-					Thread.sleep(DELAY);
+					Thread.sleep(intervalDelay * 1000);
 				} catch (InterruptedException e) {
-					shouldRun=false;
+					shouldRun = false;
 				}
-			} //while
+			} // while
 		}
 
 	}

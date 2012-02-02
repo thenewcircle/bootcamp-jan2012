@@ -17,4 +17,6 @@
     <string name="yamba_about">Yamba About</string>
     <string name="start_service">Start Updater</string>
     <string name="stop_service">Stop Updater</string>
+    <string name="interval">Refresh Interval</string>
+    <string name="interval_summary">How frequently to refresh timeline?</string>
 </resources>
