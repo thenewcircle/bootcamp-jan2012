@@ -122,16 +122,8 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 		@Override
 		protected String doInBackground(String... status) {
 			try {
-				SharedPreferences prefs = PreferenceManager
-						.getDefaultSharedPreferences(StatusActivity.this);
-				String username = prefs.getString("username", "");
-				String password = prefs.getString("password", "");
-				String server = prefs.getString("server", "");
-				
-				Log.d(TAG, String.format("%s/%s@%s", username, password, server));
-				Twitter twitter = new Twitter(username, password);
-				twitter.setAPIRootUrl(server);
-				twitter.setStatus(status[0]);
+				YambaApp yambaApp = (YambaApp)getApplication();
+				yambaApp.getTwitter().setStatus(status[0]);
 				return "Successfully posted: " + status[0];
 			} catch (TwitterException e) {
 				Log.e(TAG, "Failure to post", e);
