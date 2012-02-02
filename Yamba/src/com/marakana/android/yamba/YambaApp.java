@@ -8,8 +8,9 @@ import android.util.Log;
 
 public class YambaApp extends Application {
 	static final String TAG = "YambaApp";
-	private Twitter twitter;
 	private SharedPreferences prefs;
+	private Twitter twitter;
+	private StatusData statusData;
 
 	/** Called when app is created. */
 	@Override
@@ -38,5 +39,13 @@ public class YambaApp extends Application {
 	/** Returns the refresh interval preference. */
 	public long getInterval() {
 		return Long.parseLong(prefs.getString("interval", "0"));
+	}
+	
+	/** Returns status data. */
+	public StatusData getStatusData() {
+		if(statusData == null) {
+			statusData = new StatusData(this);
+		}
+		return statusData;
 	}
 }
