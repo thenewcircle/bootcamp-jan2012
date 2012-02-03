@@ -13,6 +13,13 @@ public class RefreshService extends IntentService {
 		Log.d(TAG, "RefreshService instantiated");
 	}
 
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		// Schedule possible future refreshes
+		((YambaApp)getApplication()).setupRefreshAlarm(); 
+	}
+
 	/**
 	 * Called when service is started to handle the intent. Runs on a separate,
 	 * non-UI thread.
@@ -21,5 +28,6 @@ public class RefreshService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		// Get the friends timeline
 		((YambaApp) getApplication()).fetchTimeline();
+		Log.d(TAG, "onHandleIntent at "+ System.currentTimeMillis());
 	}
 }

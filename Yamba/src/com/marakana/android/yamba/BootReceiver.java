@@ -9,7 +9,7 @@ public class BootReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		context.startService(new Intent("com.marakana.action.UPDATE_SERVICE"));
+		context.startService(new Intent( context, RefreshService.class ));
 		Log.d("BootReceiver", "onReceived");
 	}
 

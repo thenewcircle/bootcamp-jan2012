@@ -3,10 +3,12 @@ package com.marakana.android.yamba;
 import java.util.List;
 
 import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.Twitter.Status;
 import winterwell.jtwitter.TwitterException;
 import winterwell.jtwitter.URLConnectionHttpClient;
-import winterwell.jtwitter.Twitter.Status;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -90,5 +92,28 @@ public class YambaApp extends Application implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 		twitter = null;
+		setupRefreshAlarm();
+	}
+
+	/** Schedule RefreshService to run periodically. */
+	public void setupRefreshAlarm() {
+		Intent intent = new Intent(this, RefreshService.class);
+		PendingIntent pendingIntent = PendingIntent.getService(this, -1,
+				intent, PendingIntent.FLAG_ONE_SHOT);
+
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		long interval = getInterval() * 1000;
+		if (interval == 0) {
+			// Cancel pending intents 
+			alarmManager.cancel(pendingIntent);
+		} else {
+			// Setup repeating pending intents
+			alarmManager.setInexactRepeating(AlarmManager.RTC,
+					System.currentTimeMillis() + interval, interval,
+					pendingIntent);
+		}
+
+		Log.d(TAG, String.format("setupRefreshAlarm for %d s from now",
+				getInterval()));
 	}
 }
