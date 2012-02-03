@@ -76,13 +76,14 @@ public class TimelineActivity extends ListActivity {
 			startActivity(new Intent(this, AboutActivity.class));
 			return true;
 		case R.id.item_start:
-			startService(new Intent(this, UpdateService.class));
+			startService(new Intent("com.marakana.action.UPDATE_SERVICE"));
 			return true;
 		case R.id.item_stop:
-			stopService(new Intent(this, UpdateService.class));
+			stopService(new Intent("com.marakana.action.UPDATE_SERVICE"));
 			return true;
 		case R.id.item_refresh:
-			startService(new Intent(this, RefreshService.class));
+//			startService(new Intent("com.marakana.action.REFRESH"));
+			sendBroadcast( new Intent("com.marakana.action.REFRESH") );
 			return true;
 		}
 		return false;
