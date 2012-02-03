@@ -54,12 +54,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        
-        <receiver android:name=".RefreshReceiver">
-            <intent-filter>
-                <action android:name="com.marakana.action.REFRESH" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

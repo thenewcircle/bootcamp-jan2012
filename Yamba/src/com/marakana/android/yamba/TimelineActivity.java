@@ -82,8 +82,7 @@ public class TimelineActivity extends ListActivity {
 			stopService(new Intent("com.marakana.action.UPDATE_SERVICE"));
 			return true;
 		case R.id.item_refresh:
-//			startService(new Intent("com.marakana.action.REFRESH"));
-			sendBroadcast( new Intent("com.marakana.action.REFRESH") );
+			startService(new Intent("com.marakana.action.REFRESH"));
 			return true;
 		}
 		return false;
