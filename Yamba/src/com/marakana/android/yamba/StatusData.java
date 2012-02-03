@@ -73,7 +73,7 @@ public class StatusData {
 		/** Called when the old schema is different then new schema. */
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// Typically SQL such as: ALTER TABLE ADD COLUM ...
+			// Typically SQL such as: ALTER TABLE ADD COLUMN ...
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE);
 			onCreate(db);
 		}

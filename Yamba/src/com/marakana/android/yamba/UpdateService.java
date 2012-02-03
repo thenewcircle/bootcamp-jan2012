@@ -60,6 +60,7 @@ public class UpdateService extends Service {
 				try {
 					List<Status> timeline = yambaApp.getTwitter().getHomeTimeline();
 					for (Status status : timeline) {
+						yambaApp.getStatusData().insert(status);
 						Log.d(TAG, String.format("%s: %s", status.user.name,
 								status.text));
 					}

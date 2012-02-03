@@ -4,19 +4,23 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
+import android.view.View;
 import android.widget.SimpleCursorAdapter;
+import android.widget.SimpleCursorAdapter.ViewBinder;
+import android.widget.TextView;
 
 public class TimelineActivity extends ListActivity {
 	static final String TAG = "TimelineActivity";
 
-	String[] FROM = { StatusData.C_USER, StatusData.C_TEXT };
-	int[] TO = { R.id.text_user, R.id.text_text };
+	String[] FROM = { StatusData.C_USER, StatusData.C_TEXT,
+			StatusData.C_CREATED_AT };
+	int[] TO = { R.id.text_user, R.id.text_text, R.id.text_createdAt };
 
 	YambaApp yambaApp;
-	ListAdapter adapter;
+	SimpleCursorAdapter adapter;
 	Cursor cursor;
 
 	@Override
@@ -29,8 +33,25 @@ public class TimelineActivity extends ListActivity {
 
 		// Setup the adapter
 		adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
+		adapter.setViewBinder(VIEW_BINDER);
 		setListAdapter(adapter);
 	}
+	
+	/** Custom ViewBinder to convert timestamp to relative time. */
+	static final ViewBinder VIEW_BINDER = new ViewBinder() {
+		@Override
+		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			// Ignore custom binding for user and text values
+			if(view.getId() != R.id.text_createdAt) return false;
+			
+			// Custom binding for timestamp to relative time
+			long timestamp = cursor.getLong(columnIndex);
+			CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(timestamp);
+			((TextView)view).setText(relativeTime);
+			return true;
+		}
+		
+	};
 
 	// ----- Menu Callbacks -----
 
