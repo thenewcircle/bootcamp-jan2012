@@ -1,10 +1,6 @@
 package com.marakana.android.yamba;
 
-import java.util.List;
-
 import winterwell.jtwitter.Twitter;
-import winterwell.jtwitter.Twitter.Status;
-import winterwell.jtwitter.TwitterException;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -52,22 +48,12 @@ public class UpdateService extends Service {
 
 		@Override
 		public void run() {
-			YambaApp yambaApp = (YambaApp)getApplication();
 			long intervalDelay = ((YambaApp)getApplication()).getInterval();
-			
+
 			while (shouldRun && intervalDelay != 0) {
 				// Get the friends timeline
-				try {
-					List<Status> timeline = yambaApp.getTwitter().getHomeTimeline();
-					for (Status status : timeline) {
-						yambaApp.getStatusData().insert(status);
-						Log.d(TAG, String.format("%s: %s", status.user.name,
-								status.text));
-					}
-				} catch (TwitterException e1) {
-					Log.e(TAG, "Failed to pull timeline", e1);
-				}
-
+				((YambaApp)getApplication()).fetchTimeline();
+				
 				// Sleep
 				try {
 					intervalDelay = ((YambaApp)getApplication()).getInterval();

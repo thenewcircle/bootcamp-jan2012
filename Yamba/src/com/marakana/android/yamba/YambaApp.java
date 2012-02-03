@@ -1,8 +1,13 @@
 package com.marakana.android.yamba;
 
+import java.util.List;
+
 import winterwell.jtwitter.Twitter;
+import winterwell.jtwitter.TwitterException;
 import winterwell.jtwitter.URLConnectionHttpClient;
+import winterwell.jtwitter.Twitter.Status;
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
@@ -56,6 +61,29 @@ public class YambaApp extends Application implements
 			statusData = new StatusData(this);
 		}
 		return statusData;
+	}
+
+	/** Connects to twitter, gets the timeline, inserts it into DB. */
+	public void fetchTimeline() {
+		boolean hasNewStatuses = false;
+
+		// Get the friends timeline
+		try {
+
+			List<Status> timeline = getTwitter().getHomeTimeline();
+			for (Status status : timeline) {
+				if (getStatusData().insert(status) != -1) {
+					hasNewStatuses = true;
+				}
+				Log.d(TAG,
+						String.format("%s: %s", status.user.name, status.text));
+			}
+		} catch (TwitterException e) {
+			Log.e(TAG, "Failed to pull timeline", e);
+		}
+		// Send broadcast
+		if (hasNewStatuses)
+			sendBroadcast(new Intent(NEW_STATUS_BROADCAST));
 	}
 
 	/** Called when prefs change. */

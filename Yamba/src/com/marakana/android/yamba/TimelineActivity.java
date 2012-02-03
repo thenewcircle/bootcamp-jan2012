@@ -96,7 +96,7 @@ public class TimelineActivity extends ListActivity {
 
 	
 	// --- Timeline Receiver related code
-	BroadcastReceiver receiver = new TimelineReceiver();
+	TimelineReceiver receiver = new TimelineReceiver();
 	IntentFilter filter = new IntentFilter( YambaApp.NEW_STATUS_BROADCAST );
 	
 	@Override
