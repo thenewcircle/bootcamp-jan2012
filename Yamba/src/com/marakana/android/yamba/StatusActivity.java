@@ -55,37 +55,6 @@ public class StatusActivity extends Activity implements OnClickListener, TextWat
 		// Debug.stopMethodTracing();
 	}
 
-	// ----- Menu Callbacks -----
-
-	/** Called when menu button is pressed first time only. */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	/** Called each time a menu item is selected. */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch( item.getItemId() ) {
-		case R.id.item_prefs:
-			startActivity(new Intent(this, PrefsActivity.class));
-			return true;
-		case R.id.item_about:
-			startActivity(new Intent(this, AboutActivity.class));			
-			return true;
-		case R.id.item_start:
-			startService(new Intent(this, UpdateService.class));
-			return true;
-		case R.id.item_stop:
-			stopService(new Intent(this, UpdateService.class));
-			return true;
-		case R.id.item_refresh:
-			startService(new Intent(this, RefreshService.class));
-			return true;
-		}
-		return false;
-	}
 
 	/** Called when the update button is clicked. */
 	@Override

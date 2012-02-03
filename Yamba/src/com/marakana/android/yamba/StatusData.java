@@ -3,7 +3,7 @@ package com.marakana.android.yamba;
 import winterwell.jtwitter.Twitter.Status;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.SQLException;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -43,6 +43,13 @@ public class StatusData {
 
 		return db.insertWithOnConflict(TABLE, null, values,
 				SQLiteDatabase.CONFLICT_IGNORE);
+	}
+
+	/** Returns all statuses in timeline. */
+	public Cursor query() {
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		return db.query(TABLE, null, null, null, null, null, C_CREATED_AT
+				+ " DESC");
 	}
 
 	/** Class to help us create and upgrade database. */
