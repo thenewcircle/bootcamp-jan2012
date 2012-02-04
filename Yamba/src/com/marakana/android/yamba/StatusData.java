@@ -21,6 +21,8 @@ public class StatusData {
 	static final String C_USER = "yamba_user";
 	static final String C_TEXT = "yamba_text";
 
+	static final String SORT_BY = C_CREATED_AT + " DESC";
+	
 	Context context;
 	DbHelper dbHelper;
 
@@ -30,6 +32,16 @@ public class StatusData {
 		dbHelper = new DbHelper(context);
 	}
 
+	/** Converts Status to ContentValues. */
+	public static ContentValues statusToValues(Status status) {
+		ContentValues values = new ContentValues();
+		values.put(C_ID, status.id);
+		values.put(C_CREATED_AT, status.createdAt.getTime());
+		values.put(C_USER, status.user.name);
+		values.put(C_TEXT, status.text);
+		return values;
+	}
+	
 	/** Inserts the status into the database. */
 	public long insert(Status status) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -48,8 +60,7 @@ public class StatusData {
 	/** Returns all statuses in timeline. */
 	public Cursor query() {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		return db.query(TABLE, null, null, null, null, null, C_CREATED_AT
-				+ " DESC");
+		return db.query(TABLE, null, null, null, null, null, SORT_BY);
 	}
 
 	/** Class to help us create and upgrade database. */

@@ -23,17 +23,16 @@ public class TimelineActivity extends ListActivity {
 			StatusData.C_CREATED_AT };
 	int[] TO = { R.id.text_user, R.id.text_text, R.id.text_createdAt };
 
-	YambaApp yambaApp;
 	SimpleCursorAdapter adapter;
 	Cursor cursor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		yambaApp = (YambaApp) getApplication();
 
 		// Get the timeline
-		cursor = yambaApp.getStatusData().query();
+		cursor = getContentResolver().query(StatusProvider.CONTENT_URI, null,
+				null, null, StatusData.SORT_BY);
 
 		// Setup the adapter
 		adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
@@ -94,23 +93,21 @@ public class TimelineActivity extends ListActivity {
 		return false;
 	}
 
-	
 	// --- Timeline Receiver related code
 	TimelineReceiver receiver = new TimelineReceiver();
-	IntentFilter filter = new IntentFilter( YambaApp.NEW_STATUS_BROADCAST );
-	
+	IntentFilter filter = new IntentFilter(YambaApp.NEW_STATUS_BROADCAST);
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		registerReceiver(receiver, filter);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(receiver);
 	}
-
 
 	/**
 	 * Called when there are new statuses in the database so we can update the
@@ -120,7 +117,8 @@ public class TimelineActivity extends ListActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			// Update list from new timeline
-			cursor = yambaApp.getStatusData().query();
+			cursor = getContentResolver().query(StatusProvider.CONTENT_URI,
+					null, null, null, StatusData.SORT_BY);
 			adapter.changeCursor(cursor);
 			Log.d(TAG, "TimelineReceiver refreshing the list");
 		}

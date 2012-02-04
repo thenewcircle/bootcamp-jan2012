@@ -8,7 +8,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".YambaApp"
@@ -42,18 +42,22 @@
                 <action android:name="com.marakana.action.UPDATE_SERVICE" />
             </intent-filter>
         </service>
-        
         <service android:name=".RefreshService" >
             <intent-filter>
-                <action android:name="com.marakana.action.REFRESH"/>
+                <action android:name="com.marakana.action.REFRESH" />
             </intent-filter>
         </service>
 
         <receiver android:name=".BootReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name=".StatusProvider"
+            android:authorities="com.marakana.android.yamba.provider" >
+        </provider>
     </application>
 
 </manifest>

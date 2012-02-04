@@ -9,9 +9,11 @@ import winterwell.jtwitter.URLConnectionHttpClient;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -21,7 +23,6 @@ public class YambaApp extends Application implements
 	static final String NEW_STATUS_BROADCAST = "com.marakana.broadcast.NEW_STATUS";
 	private SharedPreferences prefs;
 	private Twitter twitter;
-	private StatusData statusData;
 
 	/** Called when app is created. */
 	@Override
@@ -57,24 +58,18 @@ public class YambaApp extends Application implements
 		return Long.parseLong(prefs.getString("interval", "0"));
 	}
 
-	/** Returns status data. */
-	public StatusData getStatusData() {
-		if (statusData == null) {
-			statusData = new StatusData(this);
-		}
-		return statusData;
-	}
-
 	/** Connects to twitter, gets the timeline, inserts it into DB. */
 	public void fetchTimeline() {
 		boolean hasNewStatuses = false;
 
 		// Get the friends timeline
 		try {
-
 			List<Status> timeline = getTwitter().getHomeTimeline();
 			for (Status status : timeline) {
-				if (getStatusData().insert(status) != -1) {
+				ContentValues values = StatusData.statusToValues(status);
+				Uri uri = getContentResolver().insert( StatusProvider.CONTENT_URI, values);
+
+				if ( !"-1".equals( uri.getLastPathSegment() ) ) {
 					hasNewStatuses = true;
 				}
 				Log.d(TAG,
@@ -104,7 +99,7 @@ public class YambaApp extends Application implements
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		long interval = getInterval() * 1000;
 		if (interval == 0) {
-			// Cancel pending intents 
+			// Cancel pending intents
 			alarmManager.cancel(pendingIntent);
 		} else {
 			// Setup repeating pending intents
